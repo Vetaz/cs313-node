@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Form</title>
+  </head>
+  <body>
+    <h1>This is the form</h1>
+    <form action="/math_service" method="GET">
+      <input type="number" id="num1" name="num1" />
+      <select id="operation" name="operation">
+        <option value="add">+</option>
+        <option value="sub">-</option>
+        <option value="mul">*</option>
+        <option value="div">/</option>
+      </select>
+      <input type="number" id="num2" name="num2" /><br />
+      <input type="submit" value="submit" />
+      <button type="button" id="butt-on">AJAX BUTTON</button>
+    </form>
+    <div id="results"> </div>
+    <script>
+      document.getElementById("butt-on").addEventListener("click", ajaxCall);
+
+      function ajaxCall(event) {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+          if (this.readyState == 4 && this.status == 200) {
+            console.log(this.responseText);
+            var jResponse = JSON.parse(this.responseText);
+            console.log(jResponse);
+            document.getElementById("results").innerHTML = jResponse.result;
+          }
+        };
+
+        var URL =
+          "/math_service?" +
+          "num1=" +
+          document.getElementById("num1").value +
+          "&" +
+          "num2=" +
+          document.getElementById("num2").value +
+          "&" +
+          "operation=" +
+          document.getElementById("operation").value;
+        xhr.open("GET", URL, true);
+        xhr.send();
+      }
+    </script>
+  </body>
+</html>
